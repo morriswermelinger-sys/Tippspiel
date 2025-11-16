@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Regeln – Tippspiel</title>
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#fff; color:#000; }
+    .hero { width:100%; max-height:400px; object-fit:cover; display:block; }
+    .cards { display:flex; justify-content:center; align-items:stretch; width:100%; }
+    .card { flex:1; height:70px; background:#fff; color:#000; display:flex; justify-content:center; align-items:center;
+            font-size:18px; text-decoration:none; border-top:2px solid #000; border-bottom:2px solid #000; border-left:2px solid #000; }
+    .card:first-child { border-left:none; } .card:hover { background:#f5f5f5; }
+    @media (max-width:768px){ .cards{ flex-direction:column; } .card{ border-left:none; border-top:2px solid #000; } .card:first-child{ border-top:none; } }
+    .content { width:95%; max-width:900px; margin: 26px auto 60px; line-height:1.6; }
+    .section { background:#fafafa; border:1px solid #ececec; border-radius:12px; padding:20px; margin:12px 0; }
+    h1 { text-align:center; }
+    h2 { margin-top:18px; border-bottom:2px solid #eee; padding-bottom:6px; }
+    ul { padding-left:18px; }
+    
+/* Avatar + Admin FAB */
+.user-avatar { position: fixed; top: 14px; left: 14px; width: 38px; height: 38px; border-radius: 50%; background:#fff; border:2px solid #000;
+  display:flex; align-items:center; justify-content:center; font-weight:700; cursor:pointer; z-index:1000; box-shadow:0 3px 10px rgba(0,0,0,.12); }
+.user-avatar:hover::after { content: attr(data-name); position:absolute; left: 46px; top: -2px; background:#000; color:#fff; font-size:12px; padding:4px 8px; border-radius:6px; white-space:nowrap; }
+.fab-admin { position: fixed; right: 16px; bottom: 16px; width: 46px; height: 46px; border-radius: 10px; background:#fff; border:2px solid #000;
+  display:flex; align-items:center; justify-content:center; text-decoration:none; color:#000; font-size:22px; z-index:1000; box-shadow: 0 4px 14px rgba(0,0,0,.14); }
+.fab-admin:hover { background:#f5f5f5; }
+
+  </style>
+</head>
+<body>
+  <img class="hero" src="https://e6.365dm.de/23/05/2048x1152/skysport_de-fifa-wm-2026_6158884.jpg?20230518081555" alt="Hero"/>
+  <div class="cards">
+    <a class="card" href="seite1.html">Spiele</a>
+    <a class="card" href="seite2.html">Rangliste</a>
+    <a class="card" href="seite3.html">Regeln</a>
+  </div>
+  <div class="content">
+    <h1>Regeln</h1>
+    <div class="section">
+      <p>Wenn die Spieler ihre Tipps abgegeben haben, werden diese zu Spielbeginn automatisch gesperrt und können nicht mehr abgeändert werden.</p>
+    </div>
+    <div class="section">
+      <h2>Punkteverteilung</h2>
+      <h3>Gruppenphase</h3>
+      <ul>
+        <li>Gewinner richtig, oder Unentschieden: <strong>5 Punkte</strong></li>
+        <li>Tordifferenz richtig (Gewinner muss ebenfalls stimmen): <strong>3 Punkte</strong></li>
+        <li>Anzahl Heim-Tore richtig: <strong>1 Punkt</strong></li>
+        <li>Anzahl Gast-Tore richtig: <strong>1 Punkt</strong></li>
+      </ul>
+      <h3>K.O.-Phase</h3>
+      <ul>
+        <li>Gewinner richtig, oder Unentschieden: <strong>10 Punkte</strong></li>
+        <li>Tordifferenz richtig (Gewinner muss ebenfalls stimmen): <strong>6 Punkte</strong></li>
+        <li>Anzahl Heim-Tore richtig: <strong>2 Punkte</strong></li>
+        <li>Anzahl Gast-Tore richtig: <strong>2 Punkte</strong></li>
+      </ul>
+      <p>In der K.O.-Phase gilt das Resultat nach 90 Minuten. Es kann also auch ein Unentschieden geben.</p>
+    </div>
+    <div class="section">
+      <h2>Punktebeispiele</h2>
+      <p><strong>Brasilien – Schweiz (Gruppenphase)</strong><br/>Tipp: 2:1, Resultat: 3:1 → 5 + 0 + 0 + 1 = <strong>6 Punkte</strong>.</p>
+      <p><strong>Deutschland – Frankreich (K.O.-Phase)</strong><br/>Tipp: 2:2, Resultat: 1:1 → 10 + 6 + 0 + 0 = <strong>16 Punkte</strong>.</p>
+    </div>
+  </div>
+  
+<script>
+(function(){
+  const API_BASE = (window.API_BASE_OVERRIDE || '') || (location.origin.startsWith('http') ? location.origin : 'http://localhost:3001');
+  const STORAGE_TOKEN = 'tippspiel_token';
+  const STORAGE_NAME = 'tippspiel_name';
+
+  function initials(name){ if(!name) return '?'; const p=name.trim().split(/\s+/); return (p[0][0]+(p[1]?.[0]||'')).toUpperCase(); }
+  function getName(){ return localStorage.getItem(STORAGE_NAME) || ''; }
+  function getToken(){ return localStorage.getItem(STORAGE_TOKEN) || ''; }
+  function setAuth(u){ if(u&&u.token){ localStorage.setItem(STORAGE_TOKEN,u.token); localStorage.setItem(STORAGE_NAME,u.name); updateAvatar(); } }
+  function updateAvatar(){
+    const av = document.getElementById('userAvatar'); if(!av) return;
+    const name = getName() || 'Nicht angemeldet'; av.setAttribute('data-name', name); av.title = name;
+    const span = av.querySelector('span'); if (span) span.textContent = initials(getName());
+  }
+  function ensureChrome(){
+    if(!document.getElementById('userAvatar')){ const av=document.createElement('div'); av.id='userAvatar'; av.className='user-avatar'; av.innerHTML='<span>?</span>';
+      av.addEventListener('click', ()=> { if(window.openLoginModal) window.openLoginModal(true); }); document.body.appendChild(av); }
+    if(!document.getElementById('adminFab')){ const a=document.createElement('a'); a.id='adminFab'; a.className='fab-admin'; a.href='admin.html'; a.innerHTML='&#9881;'; a.setAttribute('aria-label','Admin'); document.body.appendChild(a); }
+    updateAvatar();
+  }
+  function gate(){
+    const isLogin = location.pathname.endsWith('/login.html') || location.pathname.endsWith('login.html');
+    if (!getToken() && !isLogin) location.href = 'login.html';
+  }
+  window.tippspielCommon = { API_BASE, getName, getToken, setAuth, updateAvatar, ensureChrome, gate };
+  ensureChrome(); gate();
+})();
+</script>
+
+</body>
+</html>

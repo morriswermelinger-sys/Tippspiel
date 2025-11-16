@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin – Tippspiel</title>
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#fff; color:#000; }
+    .hero { width:100%; max-height:300px; object-fit:cover; display:block; }
+    .cards { display:flex; justify-content:center; align-items:stretch; width:100%; }
+    .card { flex:1; height:60px; display:flex; justify-content:center; align-items:center; font-size:18px; text-decoration:none; color:#000;
+            background:#fff; border-top:2px solid #000; border-bottom:2px solid #000; border-left:2px solid #000; }
+    .card:first-child { border-left:none; } .card:hover { background:#f5f5f5; }
+    @media (max-width:768px){ .cards{ flex-direction:column; } .card{ border-left:none; border-top:2px solid #000; } .card:first-child{ border-top:none; } }
+    .container { width:95%; max-width:1100px; margin:24px auto 40px; }
+    h1 { text-align:center; margin:20px 0; }
+    .keybar { display:flex; gap:10px; align-items:center; justify-content:center; margin-bottom:16px; }
+    .keybar input { padding:8px 10px; border:1px solid #bbb; border-radius:8px; width:260px; }
+    .btn { padding:10px 16px; border:none; border-radius:8px; cursor:pointer; font-weight:700; }
+    .btn.primary { background:#0078d7; color:#fff; } .btn.secondary { background:#eee; }
+    .grid { display:grid; grid-template-columns: 1fr auto auto auto auto; gap:10px; align-items:center; }
+    .head { font-weight:700; background:#f4f4f4; padding:10px; border-radius:8px; }
+    .item { background:#fafafa; padding:10px; border-radius:8px; }
+    .flag { width:32px; height:22px; object-fit:cover; border:1px solid #ccc; border-radius:4px; vertical-align:middle; }
+    .msg { text-align:center; margin:10px 0; }
+    .muted { color:#666; font-size:0.9rem; }
+    .ok { color:green; } .err { color:#b00020; }
+    
+/* Avatar + Admin FAB */
+.user-avatar { position: fixed; top: 14px; left: 14px; width: 38px; height: 38px; border-radius: 50%; background:#fff; border:2px solid #000;
+  display:flex; align-items:center; justify-content:center; font-weight:700; cursor:pointer; z-index:1000; box-shadow:0 3px 10px rgba(0,0,0,.12); }
+.user-avatar:hover::after { content: attr(data-name); position:absolute; left: 46px; top: -2px; background:#000; color:#fff; font-size:12px; padding:4px 8px; border-radius:6px; white-space:nowrap; }
+.fab-admin { position: fixed; right: 16px; bottom: 16px; width: 46px; height: 46px; border-radius: 10px; background:#fff; border:2px solid #000;
+  display:flex; align-items:center; justify-content:center; text-decoration:none; color:#000; font-size:22px; z-index:1000; box-shadow: 0 4px 14px rgba(0,0,0,.14); }
+.fab-admin:hover { background:#f5f5f5; }
+
+  </style>
+</head>
+<body>
+  <img class="hero" src="https://e6.365dm.de/23/05/2048x1152/skysport_de-fifa-wm-2026_6158884.jpg?20230518081555" alt="Hero"/>
+  <div class="cards">
+    <a class="card" href="seite1.html">Spiele</a>
+    <a class="card" href="seite2.html">Rangliste</a>
+    <a class="card" href="seite3.html">Regeln</a>
+  </div>
+  <div class="container">
+    <h1>Adminbereich</h1>
+    <div class="keybar">
+      <input id="adminkey" type="password" placeholder="Admin-Key eingeben"/>
+      <button class="btn primary" onclick="saveKey()">Speichern</button>
+      <button class="btn secondary" onclick="loadMatches()">Aktualisieren</button>
+    </div>
+    <div class="msg muted">Admin-Key kommt aus der Server-Umgebung (<code>ADMIN_KEY</code>). Wird lokal im Browser gespeichert.</div>
+    <div id="grid" class="grid" style="margin-top:16px;"></div>
+    <div id="status" class="msg"></div>
+  </div>
+  
+<script>
+(function(){
+  const API_BASE = (window.API_BASE_OVERRIDE || '') || (location.origin.startsWith('http') ? location.origin : 'http://localhost:3001');
+  const STORAGE_TOKEN = 'tippspiel_token';
+  const STORAGE_NAME = 'tippspiel_name';
+
+  function initials(name){ if(!name) return '?'; const p=name.trim().split(/\s+/); return (p[0][0]+(p[1]?.[0]||'')).toUpperCase(); }
+  function getName(){ return localStorage.getItem(STORAGE_NAME) || ''; }
+  function getToken(){ return localStorage.getItem(STORAGE_TOKEN) || ''; }
+  function setAuth(u){ if(u&&u.token){ localStorage.setItem(STORAGE_TOKEN,u.token); localStorage.setItem(STORAGE_NAME,u.name); updateAvatar(); } }
+  function updateAvatar(){
+    const av = document.getElementById('userAvatar'); if(!av) return;
+    const name = getName() || 'Nicht angemeldet'; av.setAttribute('data-name', name); av.title = name;
+    const span = av.querySelector('span'); if (span) span.textContent = initials(getName());
+  }
+  function ensureChrome(){
+    if(!document.getElementById('userAvatar')){ const av=document.createElement('div'); av.id='userAvatar'; av.className='user-avatar'; av.innerHTML='<span>?</span>';
+      av.addEventListener('click', ()=> { if(window.openLoginModal) window.openLoginModal(true); }); document.body.appendChild(av); }
+    if(!document.getElementById('adminFab')){ const a=document.createElement('a'); a.id='adminFab'; a.className='fab-admin'; a.href='admin.html'; a.innerHTML='&#9881;'; a.setAttribute('aria-label','Admin'); document.body.appendChild(a); }
+    updateAvatar();
+  }
+  function gate(){
+    const isLogin = location.pathname.endsWith('/login.html') || location.pathname.endsWith('login.html');
+    if (!getToken() && !isLogin) location.href = 'login.html';
+  }
+  window.tippspielCommon = { API_BASE, getName, getToken, setAuth, updateAvatar, ensureChrome, gate };
+  ensureChrome(); gate();
+})();
+</script>
+
+  <script>
+    const API_BASE = tippspielCommon.API_BASE;
+    const grid = document.getElementById('grid'); const statusBar = document.getElementById('status');
+    function getFlagUrl(code){ return `https://flagcdn.com/w40/${(code||'').toLowerCase()}.png`; }
+    function getKey(){ return localStorage.getItem('adminkey') || ''; }
+    function saveKey(){ const k=document.getElementById('adminkey').value; localStorage.setItem('adminkey', k || ''); showStatus('Admin-Key gespeichert', true); loadMatches(); }
+    function showStatus(msg, ok){ statusBar.textContent=msg||''; statusBar.className='msg ' + (ok?'ok':'err'); if(msg) setTimeout(()=>{ statusBar.textContent=''; statusBar.className='msg'; }, 1500); }
+    async function loadMatches(){
+      grid.innerHTML=''; const key=getKey(); if(!key){ document.getElementById('adminkey').focus(); return showStatus('Bitte Admin-Key eingeben', false);}
+      try{ const res=await fetch(`${API_BASE}/api/admin/matches`, { headers: { 'x-admin-key': key } });
+        if(!res.ok){ const e=await res.json().catch(()=>({})); throw new Error(e.error||'Request fehlgeschlagen'); }
+        const matches=await res.json(); renderGrid(matches);
+      }catch(err){ showStatus(err.message, false); }
+    }
+    function renderGrid(matches){
+      grid.innerHTML='';
+      grid.insertAdjacentHTML('beforeend', `<div class="head">Spiel</div><div class="head">Kickoff</div><div class="head">Phase</div><div class="head">Resultat</div><div class="head">Aktion</div>`);
+      matches.forEach(m=>{
+        const id=`match_${m.id}`; const resA=m.result?m.result.a:''; const resB=m.result?m.result.b:''; const kickoffLocal=new Date(m.kickoff).toLocaleString();
+        grid.insertAdjacentHTML('beforeend', `
+          <div class="item"><img class="flag" src="${getFlagUrl(m.codeA)}"/> ${m.teamA} &nbsp;–&nbsp; <img class="flag" src="${getFlagUrl(m.codeB)}"/> ${m.teamB}</div>
+          <div class="item">${kickoffLocal}</div>
+          <div class="item">${m.stageLabel}</div>
+          <div class="item"><input id="${id}_a" type="number" min="0" style="width:60px" value="${resA}"/> : <input id="${id}_b" type="number" min="0" style="width:60px" value="${resB}"/></div>
+          <div class="item"><button class="btn primary" onclick="saveResult('${m.id}')">Speichern</button></div>`);
+      });
+    }
+    async function saveResult(matchId){
+      const key=getKey(); const id=`match_${matchId}`; const a=parseInt(document.getElementById(`${id}_a`).value,10); const b=parseInt(document.getElementById(`${id}_b`).value,10);
+      if(Number.isNaN(a)||Number.isNaN(b)||a<0||b<0) return showStatus('Bitte gültiges Resultat eingeben', false);
+      try{ const res=await fetch(`${API_BASE}/api/admin/results`, { method:'POST', headers: { 'Content-Type':'application/json','x-admin-key':key },
+          body: JSON.stringify({ matchId, resA:a, resB:b }) });
+        if(!res.ok){ const e=await res.json().catch(()=>({})); throw new Error(e.error||'Speichern fehlgeschlagen'); }
+        showStatus('Resultat gespeichert ✓', true);
+      }catch(err){ showStatus(err.message, false); }
+    }
+    document.getElementById('adminkey').value = getKey();
+    loadMatches();
+  </script>
+</body>
+</html>

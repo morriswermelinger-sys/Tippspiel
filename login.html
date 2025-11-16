@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anmelden – Tippspiel</title>
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#fff; color:#000; }
+    .hero { width:100%; max-height:400px; object-fit:cover; display:block; }
+    .wrap { display:flex; align-items:center; justify-content:center; padding:30px 16px; }
+    .card { width:100%; max-width:520px; border:2px solid #000; border-radius:14px; padding:24px; box-shadow:0 12px 30px rgba(0,0,0,.15); }
+    h1 { margin:0 0 6px 0; font-size:1.8rem; }
+    p { margin:0 0 16px 0; color:#444; }
+    label { font-weight:700; display:block; margin-bottom:6px; }
+    input { width:100%; padding:12px; border:1px solid #bbb; border-radius:10px; font-size:1rem; }
+    .actions { margin-top:16px; display:flex; gap:10px; }
+    .btn { background:#0078d7; color:#fff; font-weight:700; padding:12px 18px; border:none; border-radius:10px; cursor:pointer; }
+    .error { color:#b00020; font-weight:700; margin-top:10px; min-height:20px; }
+    .muted { color:#666; font-size:.9rem; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <img class="hero" src="https://e6.365dm.de/23/05/2048x1152/skysport_de-fifa-wm-2026_6158884.jpg?20230518081555" alt="Hero"/>
+  <div class="wrap">
+    <div class="card">
+      <h1>Willkommen beim Tippspiel</h1>
+      <p>Erstelle dein Konto mit einem <strong>Nickname</strong>. Danach geht's direkt zu den Spielen.</p>
+      <label for="nickname">Nickname (2–30 Zeichen)</label>
+      <input id="nickname" type="text" placeholder="z. B. Alex" autofocus />
+      <div class="actions"><button class="btn" id="saveBtn">Anmelden</button></div>
+      <div id="err" class="error"></div>
+      <div class="muted">Dein Nickname erzeugt ein persönliches Token. Beides wird lokal gespeichert.</div>
+    </div>
+  </div>
+  <script>
+    const API_BASE = (window.API_BASE_OVERRIDE || '') || (location.origin.startsWith('http') ? location.origin : 'http://localhost:3001');
+    const STORAGE_TOKEN = 'tippspiel_token'; const STORAGE_NAME='tippspiel_name';
+    function setAuth(u){ if(u&&u.token){ localStorage.setItem(STORAGE_TOKEN,u.token); localStorage.setItem(STORAGE_NAME,u.name);} }
+    async function register(){
+      const input=document.getElementById('nickname'); const err=document.getElementById('err'); const name=(input.value||'').trim();
+      try{
+        const res=await fetch(`${API_BASE}/api/register`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name }) });
+        const data=await res.json(); if(!res.ok) throw new Error(data.error || 'Anmeldung fehlgeschlagen');
+        setAuth(data); location.href='seite1.html';
+      }catch(e){ err.textContent=e.message; }
+    }
+    document.getElementById('saveBtn').addEventListener('click', register);
+    document.getElementById('nickname').addEventListener('keydown', e=>{ if(e.key==='Enter') register(); });
+    if (localStorage.getItem(STORAGE_TOKEN)) location.replace('seite1.html');
+  </script>
+</body>
+</html>
