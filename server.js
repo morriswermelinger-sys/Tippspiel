@@ -61,11 +61,11 @@ function seedMatches() {
   const { c } = db.prepare("SELECT COUNT(*) AS c FROM matches").get();
   if (c > 0) return;
   const matches = [
-    { id: 'm1', team_a: 'Deutschland', code_a: 'de', team_b: 'Brasilien',  code_b: 'br', kickoff: '2025-06-14T18:00:00Z', stage: 'group' },
-    { id: 'm2', team_a: 'Frankreich',  code_a: 'fr', team_b: 'Argentinien',code_b: 'ar', kickoff: '2025-06-15T18:00:00Z', stage: 'group' },
-    { id: 'm3', team_a: 'Portugal',    code_a: 'pt', team_b: 'Spanien',    code_b: 'es', kickoff: '2025-06-16T18:00:00Z', stage: 'group' },
-    { id: 'm4', team_a: 'England',     code_a: 'gb', team_b: 'Italien',    code_b: 'it', kickoff: '2025-06-17T18:00:00Z', stage: 'group' },
-    { id: 'm5', team_a: 'USA',         code_a: 'us', team_b: 'Mexiko',     code_b: 'mx', kickoff: '2025-06-18T18:00:00Z', stage: 'group' }
+    { id: 'm1', team_a: 'Deutschland', code_a: 'de', team_b: 'Brasilien',  code_b: 'br', kickoff: '2026-06-14T18:00:00Z', stage: 'group' },
+    { id: 'm2', team_a: 'Frankreich',  code_a: 'fr', team_b: 'Argentinien',code_b: 'ar', kickoff: '2026-06-15T18:00:00Z', stage: 'group' },
+    { id: 'm3', team_a: 'Portugal',    code_a: 'pt', team_b: 'Spanien',    code_b: 'es', kickoff: '2026-06-16T18:00:00Z', stage: 'group' },
+    { id: 'm4', team_a: 'England',     code_a: 'gb', team_b: 'Italien',    code_b: 'it', kickoff: '2026-06-17T18:00:00Z', stage: 'group' },
+    { id: 'm5', team_a: 'USA',         code_a: 'us', team_b: 'Mexiko',     code_b: 'mx', kickoff: '2026-06-18T18:00:00Z', stage: 'group' }
   ];
   const ins = db.prepare(`INSERT INTO matches (id, team_a, code_a, team_b, code_b, kickoff, stage) VALUES (@id,@team_a,@code_a,@team_b,@code_b,@kickoff,@stage)`);
   const tx = db.transaction(arr => arr.forEach(m => ins.run(m)));
