@@ -162,30 +162,30 @@ function seedMatches() {
 
     /* ===================== ROUND OF 32 (16) ===================== */
 
-    { "id": "r32_1", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-06-28T18:00:00+02:00", "stage": "round_of_32" },
-    { "id": "r32_2", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-06-28T21:00:00+02:00", "stage": "round_of_32" },
-    { "id": "r32_3", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-06-29T18:00:00+02:00", "stage": "round_of_32" },
-    { "id": "r32_4", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-06-29T21:00:00+02:00", "stage": "round_of_32" },
+    { "id": "r32_1", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-06-28T18:00:00+02:00", "stage": "ko" },
+    { "id": "r32_2", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-06-28T21:00:00+02:00", "stage": "ko" },
+    { "id": "r32_3", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-06-29T18:00:00+02:00", "stage": "ko" },
+    { "id": "r32_4", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-06-29T21:00:00+02:00", "stage": "ko" },
 
     /* ===================== ROUND OF 16 (8) ===================== */
 
-    { "id": "r16_1", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-04T18:00:00+02:00", "stage": "round_of_16" },
-    { "id": "r16_2", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-04T21:00:00+02:00", "stage": "round_of_16" },
+    { "id": "r16_1", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-04T18:00:00+02:00", "stage": "ko" },
+    { "id": "r16_2", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-04T21:00:00+02:00", "stage": "ko" },
 
     /* ===================== QUARTERFINALS (4) ===================== */
 
-    { "id": "qf_1", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-09T18:00:00+02:00", "stage": "quarterfinal" },
-    { "id": "qf_2", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-09T21:00:00+02:00", "stage": "quarterfinal" },
+    { "id": "qf_1", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-09T18:00:00+02:00", "stage": "ko" },
+    { "id": "qf_2", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-09T21:00:00+02:00", "stage": "ko" },
 
     /* ===================== SEMIFINALS (2) ===================== */
 
-    { "id": "sf_1", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-14T21:00:00+02:00", "stage": "semifinal" },
-    { "id": "sf_2", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-15T21:00:00+02:00", "stage": "semifinal" },
+    { "id": "sf_1", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-14T21:00:00+02:00", "stage": "ko" },
+    { "id": "sf_2", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-15T21:00:00+02:00", "stage": "ko" },
 
     /* ===================== FINALS ===================== */
 
-    { "id": "third_place", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-18T18:00:00+02:00", "stage": "third_place" },
-    { "id": "final", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-19T21:00:00+02:00", "stage": "final" }
+    { "id": "third_place", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-18T18:00:00+02:00", "stage": "ko" },
+    { "id": "final", "team_a": "tbd", "code_a": "", "team_b": "tbd", "code_b": "", "kickoff": "2026-07-19T21:00:00+02:00", "stage": "ko" }
   ]
   const ins = db.prepare(`INSERT INTO matches (id, team_a, code_a, team_b, code_b, kickoff, stage) VALUES (@id,@team_a,@code_a,@team_b,@code_b,@kickoff,@stage)`);
   const tx = db.transaction(arr => arr.forEach(m => ins.run(m)));
