@@ -61,11 +61,11 @@ function seedMatches() {
   const { c } = db.prepare("SELECT COUNT(*) AS c FROM matches").get();
   if (c > 0) return;
   const matches = [
-    { id: 'm1', team_a: 'Deutschland', code_a: 'de', team_b: 'Brasilien',  code_b: 'br', kickoff: '2026-06-14T18:00:00Z', stage: 'group' },
-    { id: 'm2', team_a: 'Frankreich',  code_a: 'fr', team_b: 'Argentinien',code_b: 'ar', kickoff: '2026-06-15T18:00:00Z', stage: 'group' },
-    { id: 'm3', team_a: 'Portugal',    code_a: 'pt', team_b: 'Spanien',    code_b: 'es', kickoff: '2026-06-16T18:00:00Z', stage: 'group' },
-    { id: 'm4', team_a: 'England',     code_a: 'gb', team_b: 'Italien',    code_b: 'it', kickoff: '2026-06-17T18:00:00Z', stage: 'group' },
-    { id: 'm5', team_a: 'USA',         code_a: 'us', team_b: 'Mexiko',     code_b: 'mx', kickoff: '2026-06-18T18:00:00Z', stage: 'group' }
+    { id: 'm1', team_a: 'Deutschland', code_a: 'de', team_b: 'Brasilien',  code_b: 'br', kickoff: '2025-06-14T18:00:00Z', stage: 'group' },
+    { id: 'm2', team_a: 'Frankreich',  code_a: 'fr', team_b: 'Argentinien',code_b: 'ar', kickoff: '2025-06-15T18:00:00Z', stage: 'group' },
+    { id: 'm3', team_a: 'Portugal',    code_a: 'pt', team_b: 'Spanien',    code_b: 'es', kickoff: '2025-06-16T18:00:00Z', stage: 'group' },
+    { id: 'm4', team_a: 'England',     code_a: 'gb', team_b: 'Italien',    code_b: 'it', kickoff: '2025-06-17T18:00:00Z', stage: 'group' },
+    { id: 'm5', team_a: 'USA',         code_a: 'us', team_b: 'Mexiko',     code_b: 'mx', kickoff: '2025-06-18T18:00:00Z', stage: 'group' }
   ];
   const ins = db.prepare(`INSERT INTO matches (id, team_a, code_a, team_b, code_b, kickoff, stage) VALUES (@id,@team_a,@code_a,@team_b,@code_b,@kickoff,@stage)`);
   const tx = db.transaction(arr => arr.forEach(m => ins.run(m)));
@@ -168,5 +168,21 @@ app.post('/api/admin/results', requireAdmin, (req,res) => {
   db.prepare("UPDATE matches SET res_a=?, res_b=?, result_set_at=? WHERE id=?").run(resA, resB, nowUtcISO(), matchId);
   res.json({ ok:true });
 });
+
+app.post('/api/admin/match-teams', requireAdmin, (req,res) => {
+  const { matchId, teamA, codeA, teamB, codeB } = req.body || {};
+  const cleanName = (s) => (s || '').trim().replace(/\s+/g,' ');
+  const ta = cleanName(teamA);
+  const tb = cleanName(teamB);
+  const ca = (codeA || '').trim().toLowerCase();
+  const cb = (codeB || '').trim().toLowerCase();
+  if (!matchId || !ta || !tb) return res.status(400).json({ error:'Ungültige Daten' });
+  if (ta.length < 2 || tb.length < 2 || ta.length > 60 || tb.length > 60) return res.status(400).json({ error:'Teamnamen 2–60 Zeichen' });
+  if (!/^[a-z]{2}$/.test(ca) || !/^[a-z]{2}$/.test(cb)) return res.status(400).json({ error:'Flag-Code muss 2 Buchstaben sein (z.B. de, pt, gb)' });
+  const m = db.prepare("SELECT id FROM matches WHERE id = ?").get(matchId); if (!m) return res.status(404).json({ error:'Match nicht gefunden' });
+  db.prepare("UPDATE matches SET team_a=?, code_a=?, team_b=?, code_b=? WHERE id=?").run(ta, ca, tb, cb, matchId);
+  res.json({ ok:true });
+});
+
 
 app.listen(PORT, () => console.log(`Tippspiel läuft auf http://localhost:${PORT}`));

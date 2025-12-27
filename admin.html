@@ -99,19 +99,97 @@
         const matches=await res.json(); renderGrid(matches);
       }catch(err){ showStatus(err.message, false); }
     }
+        const NAME_TO_CODE = {
+      'deutschland':'de','germany':'de',
+      'brasilien':'br','brazil':'br',
+      'frankreich':'fr','france':'fr',
+      'argentinien':'ar','argentina':'ar',
+      'portugal':'pt',
+      'spanien':'es','spain':'es',
+      'england':'gb','uk':'gb','grossbritannien':'gb','großbritannien':'gb','vereinigtes königreich':'gb',
+      'italien':'it','italy':'it',
+      'usa':'us','united states':'us','vereinigte staaten':'us',
+      'mexiko':'mx','mexico':'mx',
+      'schweiz':'ch','switzerland':'ch',
+      'österreich':'at','austria':'at',
+      'niederlande':'nl','netherlands':'nl',
+      'belgien':'be','belgium':'be',
+      'dänemark':'dk','denmark':'dk',
+      'schweden':'se','sweden':'se',
+      'norwegen':'no','norway':'no',
+      'polen':'pl','poland':'pl',
+      'kroatien':'hr','croatia':'hr'
+    };
+    function esc(s){ return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+    function normName(s){ return (s||'').toLowerCase().trim().replace(/\s+/g,' '); }
+    function normCode(s){ return (s||'').toLowerCase().replace(/[^a-z]/g,'').slice(0,2); }
+
     function renderGrid(matches){
       grid.innerHTML='';
       grid.insertAdjacentHTML('beforeend', `<div class="head">Spiel</div><div class="head">Kickoff</div><div class="head">Phase</div><div class="head">Resultat</div><div class="head">Aktion</div>`);
       matches.forEach(m=>{
         const id=`match_${m.id}`; const resA=m.result?m.result.a:''; const resB=m.result?m.result.b:''; const kickoffLocal=new Date(m.kickoff).toLocaleString();
         grid.insertAdjacentHTML('beforeend', `
-          <div class="item"><img class="flag" src="${getFlagUrl(m.codeA)}"/> ${m.teamA} &nbsp;–&nbsp; <img class="flag" src="${getFlagUrl(m.codeB)}"/> ${m.teamB}</div>
+          <div class="item">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <img id="${id}_flagA" class="flag" src="${getFlagUrl(m.codeA)}"/>
+              <input id="${id}_teamA" type="text" value="${esc(m.teamA)}" style="width:140px; padding:6px 8px; border:1px solid #bbb; border-radius:8px;"/>
+              <input id="${id}_codeA" type="text" value="${esc(m.codeA)}" style="width:56px; padding:6px 8px; border:1px solid #bbb; border-radius:8px; text-transform:lowercase;" maxlength="2"/>
+              <span>&nbsp;–&nbsp;</span>
+              <img id="${id}_flagB" class="flag" src="${getFlagUrl(m.codeB)}"/>
+              <input id="${id}_teamB" type="text" value="${esc(m.teamB)}" style="width:140px; padding:6px 8px; border:1px solid #bbb; border-radius:8px;"/>
+              <input id="${id}_codeB" type="text" value="${esc(m.codeB)}" style="width:56px; padding:6px 8px; border:1px solid #bbb; border-radius:8px; text-transform:lowercase;" maxlength="2"/>
+            </div>
+          </div>
           <div class="item">${kickoffLocal}</div>
           <div class="item">${m.stageLabel}</div>
           <div class="item"><input id="${id}_a" type="number" min="0" style="width:60px" value="${resA}"/> : <input id="${id}_b" type="number" min="0" style="width:60px" value="${resB}"/></div>
-          <div class="item"><button class="btn primary" onclick="saveResult('${m.id}')">Speichern</button></div>`);
+          <div class="item">
+            <button class="btn primary" onclick="saveResult('${m.id}')">Speichern</button>
+            <button class="btn secondary" style="margin-left:10px" onclick="saveTeams('${m.id}')">Teams speichern</button>
+          </div>`);
+      });
+
+      // Live-Hilfe: Flag aktualisieren & gängige Länder automatisch in Code umsetzen
+      matches.forEach(m=>{
+        const id=`match_${m.id}`;
+        const hook = (teamId, codeId, flagId) => {
+          const teamEl=document.getElementById(teamId);
+          const codeEl=document.getElementById(codeId);
+          const flagEl=document.getElementById(flagId);
+          if(!teamEl || !codeEl || !flagEl) return;
+
+          teamEl.addEventListener('input', () => {
+            const mapped = NAME_TO_CODE[normName(teamEl.value)];
+            if(mapped){ codeEl.value = mapped; flagEl.src = getFlagUrl(mapped); }
+          });
+          codeEl.addEventListener('input', () => {
+            const cc = normCode(codeEl.value);
+            codeEl.value = cc;
+            if (cc.length === 2) flagEl.src = getFlagUrl(cc);
+          });
+        };
+        hook(`${id}_teamA`, `${id}_codeA`, `${id}_flagA`);
+        hook(`${id}_teamB`, `${id}_codeB`, `${id}_flagB`);
       });
     }
+
+    async function saveTeams(matchId){
+      const key=getKey(); const id=`match_${matchId}`;
+      const teamA=(document.getElementById(`${id}_teamA`).value||'').trim();
+      const codeA=normCode(document.getElementById(`${id}_codeA`).value);
+      const teamB=(document.getElementById(`${id}_teamB`).value||'').trim();
+      const codeB=normCode(document.getElementById(`${id}_codeB`).value);
+      if(!teamA || !teamB) return showStatus('Bitte Teamnamen eingeben', false);
+      if(!/^[a-z]{2}$/.test(codeA) || !/^[a-z]{2}$/.test(codeB)) return showStatus('Flag-Code muss 2 Buchstaben sein (z.B. de, pt, gb)', false);
+      try{ const res=await fetch(`${API_BASE}/api/admin/match-teams`, { method:'POST', headers: { 'Content-Type':'application/json','x-admin-key':key },
+          body: JSON.stringify({ matchId, teamA, codeA, teamB, codeB }) });
+        if(!res.ok){ const e=await res.json().catch(()=>({})); throw new Error(e.error||'Speichern fehlgeschlagen'); }
+        showStatus('Teams gespeichert ✓', true);
+        loadMatches();
+      }catch(err){ showStatus(err.message, false); }
+    }
+
     async function saveResult(matchId){
       const key=getKey(); const id=`match_${matchId}`; const a=parseInt(document.getElementById(`${id}_a`).value,10); const b=parseInt(document.getElementById(`${id}_b`).value,10);
       if(Number.isNaN(a)||Number.isNaN(b)||a<0||b<0) return showStatus('Bitte gültiges Resultat eingeben', false);
