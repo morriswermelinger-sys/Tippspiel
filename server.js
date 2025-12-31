@@ -143,13 +143,13 @@ function seedMatches() {
   { "id":"J6","team_a":"Jordanien","code_a":"jo","team_b":"Argentinien","code_b":"ar","kickoff":"2026-06-28T04:00:00+02:00","stage":"group" },
 
   /* ================= GROUP K ================= */
-  { "id":"L1","team_a":"England","code_a":"gb","team_b":"Kroatien","code_b":"hr","kickoff":"2026-06-17T22:00:00+02:00","stage":"group" },
-  { "id":"L2","team_a":"Ghana","code_a":"gh","team_b":"Panama","code_b":"pa","kickoff":"2026-06-18T01:00:00+02:00","stage":"group" },
-  { "id":"L3","team_a":"England","code_a":"gb","team_b":"Ghana","code_b":"gh","kickoff":"2026-06-23T22:00:00+02:00","stage":"group" },
-  { "id":"L4","team_a":"Panama","code_a":"pa","team_b":"Kroatien","code_b":"hr","kickoff":"2026-06-24T01:00:00+02:00","stage":"group" },
-  { "id":"L5","team_a":"Panama","code_a":"pa","team_b":"England","code_b":"gb","kickoff":"2026-06-27T23:00:00+02:00","stage":"group" },
-  { "id":"L6","team_a":"Kroatien","code_a":"hr","team_b":"Ghana","code_b":"gh","kickoff":"2026-06-27T23:00:00+02:00","stage":"group" },
-
+  { "id":"K1","team_a":"England","code_a":"gb","team_b":"Kroatien","code_b":"hr","kickoff":"2026-06-17T22:00:00+02:00","stage":"group" },
+  { "id":"K2","team_a":"Ghana","code_a":"gh","team_b":"Panama","code_b":"pa","kickoff":"2026-06-18T01:00:00+02:00","stage":"group" },
+  { "id":"K3","team_a":"England","code_a":"gb","team_b":"Ghana","code_b":"gh","kickoff":"2026-06-23T22:00:00+02:00","stage":"group" },
+  { "id":"K4","team_a":"Panama","code_a":"pa","team_b":"Kroatien","code_b":"hr","kickoff":"2026-06-24T01:00:00+02:00","stage":"group" },
+  { "id":"K5","team_a":"Panama","code_a":"pa","team_b":"England","code_b":"gb","kickoff":"2026-06-27T23:00:00+02:00","stage":"group" },
+  { "id":"K6","team_a":"Kroatien","code_a":"hr","team_b":"Ghana","code_b":"gh","kickoff":"2026-06-27T23:00:00+02:00","stage":"group" },
+  
   /* ================= GROUP L ================= */
   { "id":"L1","team_a":"England","code_a":"gb","team_b":"Kroatien","code_b":"hr","kickoff":"2026-06-17T22:00:00+02:00","stage":"group" },
   { "id":"L2","team_a":"Ghana","code_a":"gh","team_b":"Panama","code_b":"pa","kickoff":"2026-06-18T01:00:00+02:00","stage":"group" },
@@ -179,28 +179,28 @@ function seedMatches() {
   { "id":"R32-16","team_a":"Erster Gruppe K","code_a":"tbd","team_b":"Dritter Gruppe D/E/I/J/L","code_b":"tbd","kickoff":"2026-07-04T03:30:00+02:00","stage":"ko" },
 
     /* ===================== ROUND OF 16 (8) ===================== */
-{ "id":"R16-1",  "team_a":"Sieger R32-1",  "code_a":"tbd", "team_b":"Sieger R32-4",  "code_b":"tbd", "kickoff":"2026-07-04T19:00:00+02:00", "stage":"ko" },
-{ "id":"R16-2",  "team_a":"Sieger R32-3",  "code_a":"tbd", "team_b":"Sieger R32-6",  "code_b":"tbd", "kickoff":"2026-07-04T23:00:00+02:00", "stage":"ko" },
-{ "id":"R16-3",  "team_a":"Sieger R32-2",  "code_a":"tbd", "team_b":"Sieger R32-5",  "code_b":"tbd", "kickoff":"2026-07-05T22:00:00+02:00", "stage":"ko" },
-{ "id":"R16-4",  "team_a":"Sieger R32-7",  "code_a":"tbd", "team_b":"Sieger R32-8",  "code_b":"tbd", "kickoff":"2026-07-06T02:00:00+02:00", "stage":"ko" },
-{ "id":"R16-5",  "team_a":"Sieger R32-12", "code_a":"tbd", "team_b":"Sieger R32-11", "code_b":"tbd", "kickoff":"2026-07-06T21:00:00+02:00", "stage":"ko" },
-{ "id":"R16-6",  "team_a":"Sieger R32-10", "code_a":"tbd", "team_b":"Sieger R32-9",  "code_b":"tbd", "kickoff":"2026-07-07T02:00:00+02:00", "stage":"ko" },
-{ "id":"R16-7",  "team_a":"Sieger R32-15", "code_a":"tbd", "team_b":"Sieger R32-14", "code_b":"tbd", "kickoff":"2026-07-07T18:00:00+02:00", "stage":"ko" },
-{ "id":"R16-8",  "team_a":"Sieger R32-13", "code_a":"tbd", "team_b":"Sieger R32-16", "code_b":"tbd", "kickoff":"2026-07-07T22:00:00+02:00", "stage":"ko" },
+  { "id":"R16-1",  "team_a":"Sieger R32-1",  "code_a":"tbd", "team_b":"Sieger R32-4",  "code_b":"tbd", "kickoff":"2026-07-04T19:00:00+02:00", "stage":"ko" },
+  { "id":"R16-2",  "team_a":"Sieger R32-3",  "code_a":"tbd", "team_b":"Sieger R32-6",  "code_b":"tbd", "kickoff":"2026-07-04T23:00:00+02:00", "stage":"ko" },
+  { "id":"R16-3",  "team_a":"Sieger R32-2",  "code_a":"tbd", "team_b":"Sieger R32-5",  "code_b":"tbd", "kickoff":"2026-07-05T22:00:00+02:00", "stage":"ko" },
+  { "id":"R16-4",  "team_a":"Sieger R32-7",  "code_a":"tbd", "team_b":"Sieger R32-8",  "code_b":"tbd", "kickoff":"2026-07-06T02:00:00+02:00", "stage":"ko" },
+  { "id":"R16-5",  "team_a":"Sieger R32-12", "code_a":"tbd", "team_b":"Sieger R32-11", "code_b":"tbd", "kickoff":"2026-07-06T21:00:00+02:00", "stage":"ko" },
+  { "id":"R16-6",  "team_a":"Sieger R32-10", "code_a":"tbd", "team_b":"Sieger R32-9",  "code_b":"tbd", "kickoff":"2026-07-07T02:00:00+02:00", "stage":"ko" },
+  { "id":"R16-7",  "team_a":"Sieger R32-15", "code_a":"tbd", "team_b":"Sieger R32-14", "code_b":"tbd", "kickoff":"2026-07-07T18:00:00+02:00", "stage":"ko" },
+  { "id":"R16-8",  "team_a":"Sieger R32-13", "code_a":"tbd", "team_b":"Sieger R32-16", "code_b":"tbd", "kickoff":"2026-07-07T22:00:00+02:00", "stage":"ko" },
 
-    /* ===================== QUARTERFINALS (4) ===================== */
-{ "id":"R8-1", "team_a":"Sieger R16-2", "code_a":"tbd", "team_b":"Sieger R16-1", "code_b":"tbd", "kickoff":"2026-07-09T22:00:00+02:00", "stage":"ko" },
-{ "id":"R8-2", "team_a":"Sieger R16-5", "code_a":"tbd", "team_b":"Sieger R16-6", "code_b":"tbd", "kickoff":"2026-07-10T21:00:00+02:00", "stage":"ko" },
-{ "id":"R8-3", "team_a":"Sieger R16-3", "code_a":"tbd", "team_b":"Sieger R16-4", "code_b":"tbd", "kickoff":"2026-07-11T23:00:00+02:00", "stage":"ko" },
-{ "id":"R8-4", "team_a":"Sieger R16-7", "code_a":"tbd", "team_b":"Sieger R16-8", "code_b":"tbd", "kickoff":"2026-07-12T03:00:00+02:00", "stage":"ko" },
+      /* ===================== QUARTERFINALS (4) ===================== */
+  { "id":"R8-1", "team_a":"Sieger R16-2", "code_a":"tbd", "team_b":"Sieger R16-1", "code_b":"tbd", "kickoff":"2026-07-09T22:00:00+02:00", "stage":"ko" },
+  { "id":"R8-2", "team_a":"Sieger R16-5", "code_a":"tbd", "team_b":"Sieger R16-6", "code_b":"tbd", "kickoff":"2026-07-10T21:00:00+02:00", "stage":"ko" },
+  { "id":"R8-3", "team_a":"Sieger R16-3", "code_a":"tbd", "team_b":"Sieger R16-4", "code_b":"tbd", "kickoff":"2026-07-11T23:00:00+02:00", "stage":"ko" },
+  { "id":"R8-4", "team_a":"Sieger R16-7", "code_a":"tbd", "team_b":"Sieger R16-8", "code_b":"tbd", "kickoff":"2026-07-12T03:00:00+02:00", "stage":"ko" },
 
-    /* ===================== SEMIFINALS (2) ===================== */
-{ "id":"R4-1", "team_a":"Sieger R8-1", "code_a":"tbd", "team_b":"Sieger R8-2", "code_b":"tbd", "kickoff":"2026-07-14T21:00:00+02:00", "stage":"ko" },
-{ "id":"R4-2", "team_a":"Sieger R8-3", "code_a":"tbd", "team_b":"Sieger R8-4", "code_b":"tbd", "kickoff":"2026-07-15T21:00:00+02:00", "stage":"ko" },
+      /* ===================== SEMIFINALS (2) ===================== */
+  { "id":"R4-1", "team_a":"Sieger R8-1", "code_a":"tbd", "team_b":"Sieger R8-2", "code_b":"tbd", "kickoff":"2026-07-14T21:00:00+02:00", "stage":"ko" },
+  { "id":"R4-2", "team_a":"Sieger R8-3", "code_a":"tbd", "team_b":"Sieger R8-4", "code_b":"tbd", "kickoff":"2026-07-15T21:00:00+02:00", "stage":"ko" },
 
     /* ===================== FINALS ===================== */
    { "id":"R3-1", "team_a":"Verlierer R4-1", "code_a":"tbd", "team_b":"Verlierer R4-2", "code_b":"tbd", "kickoff":"2026-07-18T23:00:00+02:00", "stage":"ko" },
-{ "id":"R2-1", "team_a":"Sieger R4-1",    "code_a":"tbd", "team_b":"Sieger R4-2",    "code_b":"tbd", "kickoff":"2026-07-19T21:00:00+02:00", "stage":"ko" },
+   { "id":"R2-1", "team_a":"Sieger R4-1",    "code_a":"tbd", "team_b":"Sieger R4-2",    "code_b":"tbd", "kickoff":"2026-07-19T21:00:00+02:00", "stage":"ko" },
   ]
   const ins = db.prepare(`INSERT INTO matches (id, team_a, code_a, team_b, code_b, kickoff, stage) VALUES (@id,@team_a,@code_a,@team_b,@code_b,@kickoff,@stage)`);
   const tx = db.transaction(arr => arr.forEach(m => ins.run(m)));
