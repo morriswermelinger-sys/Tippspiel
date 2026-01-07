@@ -143,12 +143,13 @@ function seedMatches() {
   { "id":"J6","team_a":"Jordanien","code_a":"jo","team_b":"Argentinien","code_b":"ar","kickoff":"2026-06-28T04:00:00+02:00","stage":"group" },
 
   /* ================= GROUP K ================= */
-  { "id":"K1","team_a":"England","code_a":"gb","team_b":"Kroatien","code_b":"hr","kickoff":"2026-06-17T22:00:00+02:00","stage":"group" },
-  { "id":"K2","team_a":"Ghana","code_a":"gh","team_b":"Panama","code_b":"pa","kickoff":"2026-06-18T01:00:00+02:00","stage":"group" },
-  { "id":"K3","team_a":"England","code_a":"gb","team_b":"Ghana","code_b":"gh","kickoff":"2026-06-23T22:00:00+02:00","stage":"group" },
-  { "id":"K4","team_a":"Panama","code_a":"pa","team_b":"Kroatien","code_b":"hr","kickoff":"2026-06-24T01:00:00+02:00","stage":"group" },
-  { "id":"K5","team_a":"Panama","code_a":"pa","team_b":"England","code_b":"gb","kickoff":"2026-06-27T23:00:00+02:00","stage":"group" },
-  { "id":"K6","team_a":"Kroatien","code_a":"hr","team_b":"Ghana","code_b":"gh","kickoff":"2026-06-27T23:00:00+02:00","stage":"group" },
+  {"id":"K1","team_a":"Portugal","code_a":"pt","team_b":"Playoff-Sieger","code_b":"px","kickoff":"2026-06-17T19:00:00+02:00","stage":"group"},
+  {"id":"K2","team_a":"Usbekistan","code_a":"uz","team_b":"Kolumbien","code_b":"co","kickoff":"2026-06-18T04:00:00+02:00","stage":"group"},
+  {"id":"K3","team_a":"Portugal","code_a":"pt","team_b":"Usbekistan","code_b":"uz","kickoff":"2026-06-23T19:00:00+02:00","stage":"group"},
+  {"id":"K4","team_a":"Kolumbien","code_a":"co","team_b":"Playoff-Sieger","code_b":"px","kickoff":"2026-06-24T04:00:00+02:00","stage":"group"},
+  {"id":"K5","team_a":"Kolumbien","code_a":"co","team_b":"Portugal","code_b":"pt","kickoff":"2026-06-28T01:30:00+02:00","stage":"group"},
+  {"id":"K6","team_a":"Playoff-Sieger","code_a":"px","team_b":"Usbekistan","code_b":"uz","kickoff":"2026-06-28T01:30:00+02:00","stage":"group"},
+
   
   /* ================= GROUP L ================= */
   { "id":"L1","team_a":"England","code_a":"gb","team_b":"Kroatien","code_b":"hr","kickoff":"2026-06-17T22:00:00+02:00","stage":"group" },
